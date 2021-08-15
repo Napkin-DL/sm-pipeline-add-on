@@ -1,0 +1,16 @@
+{
+  "CloudformationStackARN": "arn:aws:cloudformation:us-east-1:854371101911:stack/SC-854371101911-pp-zbbesa5sfldqw/d33e8530-fd6b-11eb-88c8-0aa80e27dccf",
+  "SageMakerModelName": "sagemaker-soln-fpm-js-ck2wl3-model",
+  "SageMakerNotebookInstanceType": "ml.t2.medium",
+  "SageMakerTrainingInstanceType": "ml.c5.4xlarge",
+  "SageMakerInferenceInstanceType": "ml.m5.xlarge",
+  "AwsRegion": "us-east-1",
+  "SageMakerIamRole": "arn:aws:iam::854371101911:role/service-role/AmazonSageMakerServiceCatalogProductsUseRole",
+  "S3Bucket": "sagemaker-soln-fpm-js-ck2wl3-sagemaker-soln-fpm",
+  "StackName": "SC-854371101911-pp-zbbesa5sfldqw",
+  "SolutionName": "aws-fleet-predictive-maintenance/1.2.6",
+  "AwsAccountId": "854371101911",
+  "SolutionPrefix": "sagemaker-soln-fpm-js-ck2wl3",
+  "SageMakerEndpointName": "sagemaker-soln-fpm-js-ck2wl3-endpoint",
+  "SageMakerDemoEndpointName": "sagemaker-soln-fpm-js-ck2wl3-demo"
+}
