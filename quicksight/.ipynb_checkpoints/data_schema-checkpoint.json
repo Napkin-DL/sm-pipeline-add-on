@@ -1,0 +1,211 @@
+{
+  "inputContentType": "CSV",
+  "outputContentType": "CSV",
+  "input": [
+    {
+      "name": "vehicle_id",
+      "type": "INTEGER"
+    },
+    {
+      "name": "period_ms",
+      "type": "INTEGER"
+    },
+    {
+      "name": "target",
+      "type": "INTEGER"
+    },
+    {
+      "name": "make",
+      "type": "STRING"
+    },
+    {
+      "name": "model",
+      "type": "STRING"
+    },
+    {
+      "name": "year",
+      "type": "INTEGER"
+    },
+    {
+      "name": "vehicle_class",
+      "type": "STRING"
+    },
+    {
+      "name": "engine_type",
+      "type": "STRING"
+    },
+    {
+      "name": "voltage_0",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_1",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_2",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_3",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_4",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_5",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_6",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_7",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_8",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_9",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_10",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_11",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_12",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_13",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_14",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_15",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_16",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_17",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_18",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "voltage_19",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_0",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_1",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_2",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_3",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_4",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_5",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_6",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_7",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_8",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_9",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_10",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_11",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_12",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_13",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_14",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_15",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_16",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_17",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_18",
+      "type": "DECIMAL"
+    },
+    {
+      "name": "current_19",
+      "type": "DECIMAL"
+    }
+],
+  "output": [
+    {
+      "name": "Predicted",
+      "type": "DECIMAL"
+    }
+  ],
+  "description": "description",
+  "version": "v1",
+  "instanceCount": 1,
+  "instanceTypes": [
+    "ml.c4.xlarge"
+  ],
+  "defaultInstanceType": "ml.c4.xlarge"
+}
