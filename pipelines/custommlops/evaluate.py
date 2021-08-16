@@ -67,7 +67,7 @@ if __name__ == "__main__":
         print(root, dir, file)
         
     logger.debug("Loading model.")
-    with open(os.path.join(base_dir, "output/net.pth"), 'rb') as f:
+    with open(os.path.join(base_dir, "model.pth"), 'rb') as f:
         model_info = torch.load(f)
         pre_trained_model = model_info["net"]
 
