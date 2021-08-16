@@ -32,6 +32,7 @@ def model_fn(model_dir):
             
         for key, value in weight_dict.items():
             net_dict[key] = value
+        net.load_state_dict(net_dict)
     print("Net loaded")
     net = net.to(device)
     return net
@@ -44,8 +45,8 @@ def transform_fn(net, data, input_content_type, output_content_type):
     output = net(input_data).cpu().detach().numpy().tolist()
     return output, output_content_type
 
-if __name__ == "__main__":
-    net = model_fn(".")
-    import numpy as np
-    data = np.ones(shape=(1, 20, 2))
-    print(transform_fn(net, json.dumps(data.tolist()), None, None))
+# if __name__ == "__main__":
+#     net = model_fn(".")
+#     import numpy as np
+#     data = np.ones(shape=(1, 20, 2))
+#     print(transform_fn(net, json.dumps(data.tolist()), None, None))

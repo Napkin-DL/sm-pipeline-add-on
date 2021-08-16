@@ -68,6 +68,7 @@ def model_fn(model_dir):
             
         for key, value in weight_dict.items():
             net_dict[key] = value
+        net.load_state_dict(net_dict)
     print("Net loaded")
     net = net.to(device)
     return net

@@ -18,6 +18,7 @@ import os
 import pickle
 import tarfile
 import subprocess
+
 import sys
 import boto3
 import time
@@ -26,6 +27,7 @@ sys.path.append("/opt/ml/processing")
 
 try:
     subprocess.check_call([sys.executable, "-m", "pip", "install", "pyyaml"])
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "sagemaker-experiments"])
 except:
     print("Using Codebuild")
     pass
@@ -37,6 +39,9 @@ import numpy as np
 from source.config import Config
 from source.dl_utils.network import Network
 from source.dl_utils.dataset import PMDataset_torch
+
+from smexperiments import tracker
+
 
 # from torchsummary import summary
 
@@ -53,6 +58,7 @@ logger.addHandler(logging.StreamHandler())
       
         
 if __name__ == "__main__":
+    my_tracker = tracker.Tracker.create()
     
     base_dir = "/opt/ml/processing/"
     
@@ -90,13 +96,14 @@ if __name__ == "__main__":
 
         for key, value in weight_dict.items():
             net_dict[key] = value
+        net.load_state_dict(net_dict)
     print("Net loaded")
 
     if torch.cuda.is_available() :
         device = torch.device('cuda')
     else : 
         device = torch.device('cpu')
-
+    
     model = net.to(device)
 
     # summary(model, input_size=(1,20, 2), device=device.type) # summary 함수를 통해 임의의 사이즈를 넣어 구조와 파라미터를 확인할 수 있습니다
@@ -130,6 +137,11 @@ if __name__ == "__main__":
     pred = predictions[:, 1]
     total_acc += accuracy_score(y_test, pred>0.5)
     total_auc += roc_auc_score(y_test, pred)
+    
+    
+    my_tracker.log_roc_curve(y_test, pred)
+    my_tracker.log_confusion_matrix(y_test, pred>0.5)
+
 
     # The metrics reported can change based on the model used, but it must be a specific name per (https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html)
     report_dict = {
