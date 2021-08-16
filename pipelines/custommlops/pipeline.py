@@ -30,7 +30,7 @@ import boto3
 import sagemaker
 import sagemaker.session
 from sagemaker.estimator import Estimator
-from sagemaker.inputs import TrainingInput
+from sagemaker.inputs import TrainingInput, CreateModelInput
 from sagemaker.model_metrics import MetricsSource, ModelMetrics
 from sagemaker.processing import ProcessingInput, ProcessingOutput, ScriptProcessor
 from sagemaker.sklearn.processing import SKLearnProcessor
@@ -40,10 +40,11 @@ from sagemaker.workflow.parameters import ParameterInteger, ParameterString
 from sagemaker.workflow.pipeline import Pipeline
 from sagemaker.workflow.properties import PropertyFile
 from sagemaker.workflow.step_collections import RegisterModel
-from sagemaker.workflow.steps import ProcessingStep, TrainingStep, CacheConfig, TuningStep
+from sagemaker.workflow.steps import ProcessingStep, TrainingStep, CacheConfig, TuningStep, CreateModelStep
 
 from sagemaker.tuner import IntegerParameter, CategoricalParameter, ContinuousParameter, HyperparameterTuner
 from sagemaker.pytorch import PyTorch
+from sagemaker.model import Model
 from sagemaker.s3 import S3Uploader
 
 from sagemaker.workflow.functions import Join
@@ -219,7 +220,7 @@ def get_pipeline(
     model_path = f"s3://{sagemaker_session.default_bucket()}/{base_job_prefix}/CustomMLOpsTrain/"
 
 
-    image_uri = sagemaker.image_uris.retrieve(
+    image_uri_torch = sagemaker.image_uris.retrieve(
         framework="pytorch",
         region=region,
         version="1.5.0",
@@ -230,9 +231,11 @@ def get_pipeline(
     
     max_jobs = 4
     max_parallel_jobs = 2
+
     max_jobs = 1
     max_parallel_jobs = 1
     
+
     metric_definitions = [
         {'Name': 'Epoch', 'Regex': 'Epoch: ([-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?)'},
         {'Name': 'train_loss', 'Regex': 'Train loss: ([-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?)'},
@@ -295,7 +298,6 @@ def get_pipeline(
                             content_type="text/csv",
                         )
     
-    
     step_tuning = TuningStep(
                     name="CustomMLOpsTuner",
                     tuner=tuner,
@@ -309,7 +311,7 @@ def get_pipeline(
 
     # Processing step for evaluation
     script_eval = ScriptProcessor(
-        image_uri=image_uri,
+        image_uri=image_uri_torch,
         command=["python3"],
         instance_type=processing_instance_type,
         instance_count=processing_instance_count,
@@ -364,20 +366,44 @@ def get_pipeline(
             content_type="application/json",
         )
     )
-
+    
+    model_output = Join(values=[model_path, step_tuning.properties.BestTrainingJob.TrainingJobName,"/output/model.tar.gz"])
+    
+    
+    create_model = Model(
+        name="CustomModel",
+        model_data=model_output,
+        image_uri=image_uri_torch,
+        env = {"SAGEMAKER_PROGRAM": "predictor.py"},
+        sagemaker_session=sagemaker_session,
+        role=role,
+    )
+    
+    
+    input_model = CreateModelInput(
+                           instance_type="ml.m5.xlarge"
+                        )
+    
+    
+    step_model = CreateModelStep(
+        name="CustomMLOpsCreateModel",
+        model=create_model,
+        inputs=input_model
+    )
+    
     # Register model step that will be conditionally executed
     step_register = RegisterModel(
         name="CustomMLOpsRegisterModel",
         estimator=estimator,
 #         model_data=step_train.properties.ModelArtifacts.S3ModelArtifacts,
-        model_data=Join(values=[model_path, step_tuning.properties.BestTrainingJob.TrainingJobName,"/output/model.tar.gz"]),
+        model_data=model_output,
         content_types=["text/csv"],
         response_types=["text/csv"],
         inference_instances=["ml.t2.medium", "ml.m5.large"],
         transform_instances=["ml.m5.large"],
         model_package_group_name=model_package_group_name,
         approval_status=model_approval_status,
-        model_metrics=model_metrics,
+        model_metrics=model_metrics
     )
 
     # Condition step for evaluating model quality and branching execution
@@ -392,7 +418,7 @@ def get_pipeline(
     step_cond = ConditionStep(
         name="CustomMLOpsAccuracyCond",
         conditions=[cond_lte],
-        if_steps=[step_register],
+        if_steps=[step_model, step_register],
         else_steps=[],
     )
 
