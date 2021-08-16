@@ -170,7 +170,7 @@ def run():
                  "sensor_headers": json.loads(args.sensor_headers),
                  "fc_hidden_units": json.loads(args.fc_hidden_units),
                  "conv_channels": json.loads(args.conv_channels)}, 
-                os.path.join(output_path, "net.pth"))
+                os.path.join(output_path, "model.pth"))
 
         #######  COPY for inference #######
         #######  model/code/inference.py ##
