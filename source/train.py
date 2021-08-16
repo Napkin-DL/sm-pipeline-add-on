@@ -77,7 +77,6 @@ def run_epoch(net, dl, optimizer, critereon, is_train):
         try:
             total_auc += roc_auc_score(label.cpu().detach().numpy(), predict)
         except ValueError:
-            total_auc = 0.0
             pass
         N += 1
 
