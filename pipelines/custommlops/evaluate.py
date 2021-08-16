@@ -142,7 +142,7 @@ if __name__ == "__main__":
     my_tracker.log_roc_curve(y_test, pred)
     my_tracker.log_confusion_matrix(y_test, pred>0.5)
 
-
+    my_tracker.close()
     # The metrics reported can change based on the model used, but it must be a specific name per (https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-model-quality-metrics.html)
     report_dict = {
         "binary_classification_metrics": {
